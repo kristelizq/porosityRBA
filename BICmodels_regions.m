@@ -2,7 +2,7 @@ function BICmodels_regions(region)
 %This function calculates the BIC of models per region.
 %Use 'mare' or 'spa' depending of the region of interest.
 
-newRBA=readtable('RBArobbins18Goossens20_taper.csv');
+newRBA=readtable('RBArobbins18Goossens20_rho2550_taper.csv');
 craterData=readtable('regionCraters.csv');
 
 if contains(region, 'mare') 
