@@ -10,7 +10,7 @@ function rba2s2fModel(nsamples)
 %% load data
 
 %RBA data
-newRBA=readtable('RBArobbins18Goossens20_taper.csv');
+newRBA=readtable('RBArobbins18Goossens20_rho2550_taper.csv');
 
 %sort RBA by diameter 
 [~,indxSort]=sort(newRBA.Diam);
