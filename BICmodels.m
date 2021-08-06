@@ -2,7 +2,7 @@ function BICmodels()
 %This function calculates the Bayesian Information Criterion (BIC)
 %of models with 1 slope, 2 free slopes and 2 slopes with 1 fixed slope.
 
-newRBA=readtable('RBArobbins18Goossens20_taper.csv');
+newRBA=readtable('RBArobbins18Goossens20_rho2550_taper.csv');
 %sort RBA by diameter 
 [~,indxSort]=sort(newRBA.Diam);
 newRBA=newRBA(indxSort,:);
