@@ -19,7 +19,7 @@ function [bestCoef1High,bestCoef2High,bestBreakHigh,...
 %% load RBA data and separate by region
 
 %RBA data
-newRBA=readtable('../../../data/RBArobbins18Goossens20_taper.csv');
+newRBA=readtable('../../../data/RBArobbins18Goossens20_rho2550_taper.csv');
 craterData=readtable('../../../data/regionCraters.csv');
 
 %sort RBA by diameter 
