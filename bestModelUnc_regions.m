@@ -19,8 +19,8 @@ function [bestCoef1High,bestCoef2High,bestBreakHigh,...
 %% load RBA data and separate by region
 
 %RBA data
-newRBA=readtable('../../../data/RBArobbins18Goossens20_rho2550_taper.csv');
-craterData=readtable('../../../data/regionCraters.csv');
+newRBA=readtable('RBArobbins18Goossens20_rho2550_taper.csv');
+craterData=readtable('regionCraters.csv');
 
 %sort RBA by diameter 
 [~,indxSort]=sort(newRBA.Diam);
