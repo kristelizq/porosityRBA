@@ -157,12 +157,12 @@ upperS2=xS2Values(indxupperS2);
 
 %% get limits of F function (slopes and interecepts)
 
-lowerF=zeros(1,n);
-upperF=zeros(1,n);
+lowerF=zeros(1,n-1);
+upperF=zeros(1,n-1);
 
-for i=1:n
+for i=1:n-1
     
-    [cumprobF,xFvalues] = ecdf(f_all(:,i));
+    [cumprobF,xFvalues] = ecdf(ibestFsub(:,i));
 
     %find lower limit slope 2
     indxlowerF=max(find(cumprobF<=0.025));
@@ -176,7 +176,7 @@ end
 
 %make coordinates for fill in area Slopes
 yCoorLimitsF=[lowerF fliplr(upperF)];
-xCoorLimitsF=[newRBA.Diam' fliplr(newRBA.Diam')];
+xCoorLimitsF=[newRBA.Diam(1:end-1)' fliplr(newRBA.Diam(1:end-1)')];
 
 
 end

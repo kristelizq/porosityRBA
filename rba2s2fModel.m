@@ -1,16 +1,13 @@
 
-function rba2s2fModel(nsamples)
+function rba2s2fModel(nsamples,printing)
 %This function find the best fitting 2 slope model for RBA data and the
 %uncertainty on each slope and breakpoint.
 %The two slopes of the model are free (instead of having one fixed slope)
 
-%nsamples is the number of samples used for calculating the 
-%uncertainty of the breakpoint and slope with a bootstrapping 
-%method.
 %% load data
 
 %RBA data
-newRBA=readtable('RBArobbins18Goossens20_rho2550_taper.csv');
+newRBA=readtable('../../../data/RBArobbins18Goossens20_rho2550_taper.csv');
 
 %sort RBA by diameter 
 [~,indxSort]=sort(newRBA.Diam);
@@ -58,6 +55,11 @@ for i=3:nbreaks-3
     res=(f_all(i,:)-newRBA.RBA')*(f_all(i,:)-newRBA.RBA')';
     L=-n/2*log(res);
     BIC(i)=L-1/2*p*log(n);
+    
+    %remove after debugging
+    plot(newRBA.Diam,f_all(i,:))
+    ylim([-10,10])
+    hold on
     
 end
 
@@ -205,15 +207,42 @@ xlim([min(ibestCoeff2(:,1)) max(ibestCoeff2(:,1))])
 title(['Slope 2=' num2str(bestCoeff2(1)) ' +'...
        num2str(upperS2-bestCoeff2(1)) ' -' ...
        num2str(bestCoeff2(1)-lowerS2)])
+   
+%Print figure
+set(gcf, 'InvertHardCopy', 'off');
+set(gcf, 'Color', 'white')
+posfig=get(gca,'Position');
+set(gca,'Position',posfig);
+set(gcf,'Units','Inches');
+pos = get(gcf,'position');
+set(gcf,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[pos(3), pos(4)])
 
+if printing=='yes'
+    filenamef=['cumprobRBAmodel' ];
+    print(gcf,'-painters','-dpdf',filenamef);
+end
+   
 %% get limits of F function (slopes and interecepts)
 
-lowerF=zeros(1,n);
-upperF=zeros(1,n);
+lowerF=zeros(1,n-1);
+upperF=zeros(1,n-1);
 
-for i=1:n
+% for i=1:n
+%     
+%     [cumprobF,xFvalues] = ecdf(f_all(:,i));
+% 
+%     %find lower limit slope 2
+%     indxlowerF=max(find(cumprobF<=0.025));
+%     lowerF(i)=xFvalues(indxlowerF);
+%     %find upper limit slope 2
+%     indxupperF=min(find(cumprobF>=0.975));
+%     upperF(i)=xFvalues(indxupperF);
+%     
+% end
+
+for i=1:n-1
     
-    [cumprobF,xFvalues] = ecdf(f_all(:,i));
+    [cumprobF,xFvalues] = ecdf(ibestFsub(:,i));
 
     %find lower limit slope 2
     indxlowerF=max(find(cumprobF<=0.025));
@@ -229,7 +258,7 @@ end
 
 %make coordinates for fill in area Slopes
 yCoorLimitsF=[lowerF fliplr(upperF)];
-xCoorLimitsF=[newRBA.Diam' fliplr(newRBA.Diam')];
+xCoorLimitsF=[newRBA.Diam(1:end-1)' fliplr(newRBA.Diam(1:end-1)')];
 
 
 figure(2)
@@ -261,7 +290,16 @@ hold on
 line([upperBreakpoint upperBreakpoint],...
      [-limRBA,limRBA],...
      'Color',[0.8500, 0.3250, 0.0980],'LineStyle','--','LineWidth',2)
-
+% l2=legend('data','95% CI of slope',...
+%         ['best fit line (' ...
+%        num2str(bestCoeff1(1)) ', ' ...
+%        num2str(bestCoeff1(2)) ') '...
+%        '(' num2str(bestCoeff2(1)) ', ' ...
+%        num2str(bestCoeff2(2)) ')'],...
+%        'breakpoint',...
+%        '95% CI of breakpoint');
+%l2.Location='northoutside';
+%pbaspect([2,1,1])
 
 %zoom in-------------------
 subplot(2,1,2)
@@ -290,7 +328,30 @@ hold on
 line([upperBreakpoint upperBreakpoint],...
      [-limRBA,limRBA],...
      'Color',[0.8500, 0.3250, 0.0980],'LineStyle','--','LineWidth',2)
+% l2=legend('data','95% CI of slope',...
+%         ['best fit line (' ...
+%        num2str(bestCoeff1(1)) ', ' ...
+%        num2str(bestCoeff1(2)) ') '...
+%        '(' num2str(bestCoeff2(1)) ', ' ...
+%        num2str(bestCoeff2(2)) ')'],...
+%        'breakpoint',...
+%        '95% CI of breakpoint');
+%l2.Location='northoutside';
+%pbaspect([2,1,1])
 
+%Print figure
+set(gcf, 'InvertHardCopy', 'off');
+set(gcf, 'Color', 'white')
+posfig=get(gca,'Position');
+set(gca,'Position',posfig);
+set(gcf,'Units','Inches');
+pos = get(gcf,'position');
+set(gcf,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[pos(3), pos(4)])
+
+if printing=='yes'
+    filenamef=['rbaModelWithZoom' ];
+    print(gcf,'-painters','-dpdf',filenamef);
+end
 
 
 end
