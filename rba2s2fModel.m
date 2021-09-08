@@ -56,11 +56,6 @@ for i=3:nbreaks-3
     L=-n/2*log(res);
     BIC(i)=L-1/2*p*log(n);
     
-    %remove after debugging
-    plot(newRBA.Diam,f_all(i,:))
-    ylim([-10,10])
-    hold on
-    
 end
 
 [maxBIC,indxMaxBIC]=max(BIC);
